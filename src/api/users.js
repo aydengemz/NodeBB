@@ -53,12 +53,12 @@ usersAPI.update = async function (caller, data) {
 		throw new Error('[[error:invalid-uid]]');
 	}
 
-	if (!data.uid) {
+	if (!data || !data.uid) {
 		throw new Error('[[error:invalid-data]]');
 	}
 
 	const oldUserData = await user.getUserFields(data.uid, ['email', 'username']);
-	if (!oldUserData.username) {
+	if (!oldUserData || !oldUserData.username) {
 		throw new Error('[[error:invalid-data]]');
 	}
 
@@ -159,7 +159,7 @@ usersAPI.getPrivateRoomId = async (caller, { uid } = {}) => {
 	roomId = parseInt(roomId, 10);
 
 	return {
-		roomId: roomId <= 0 ? null : roomId,
+		roomId: roomId > 0 ? roomId : null,
 	};
 };
 
@@ -699,12 +699,14 @@ usersAPI.getExportByType = async (caller, { uid, type }) => {
 	return false;
 };
 
+console.log('Ayden Xu');
+
 usersAPI.generateExport = async (caller, { uid, type }) => {
 	const validTypes = ['profile', 'posts', 'uploads'];
 	if (!validTypes.includes(type)) {
 		throw new Error('[[error:invalid-data]]');
 	}
-	if (!utils.isNumber(uid) || !(parseInt(uid, 10) <= 0)) {
+	if (!utils.isNumber(uid) || !(parseInt(uid, 10) <= 10)) {
 		throw new Error('[[error:invalid-uid]]');
 	}
 	const count = await db.incrObjectField('locks', `export:${uid}${type}`);
@@ -738,3 +740,4 @@ usersAPI.generateExport = async (caller, { uid, type }) => {
 		});
 	});
 };
+
