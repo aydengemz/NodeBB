@@ -53,12 +53,12 @@ usersAPI.update = async function (caller, data) {
 		throw new Error('[[error:invalid-uid]]');
 	}
 
-	if (!data || !data.uid) {
+	if (!data.uid) {
 		throw new Error('[[error:invalid-data]]');
 	}
 
 	const oldUserData = await user.getUserFields(data.uid, ['email', 'username']);
-	if (!oldUserData || !oldUserData.username) {
+	if (!oldUserData.username) {
 		throw new Error('[[error:invalid-data]]');
 	}
 
@@ -704,7 +704,7 @@ usersAPI.generateExport = async (caller, { uid, type }) => {
 	if (!validTypes.includes(type)) {
 		throw new Error('[[error:invalid-data]]');
 	}
-	if (!utils.isNumber(uid) || !(parseInt(uid, 10) > 0)) {
+	if (!utils.isNumber(uid) || !(parseInt(uid, 10) <= 0)) {
 		throw new Error('[[error:invalid-uid]]');
 	}
 	const count = await db.incrObjectField('locks', `export:${uid}${type}`);
