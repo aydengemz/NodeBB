@@ -1870,3 +1870,4 @@ describe('Controllers', () => {
 		analytics.writeData(done);
 	});
 });
+
