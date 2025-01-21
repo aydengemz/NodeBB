@@ -159,7 +159,7 @@ usersAPI.getPrivateRoomId = async (caller, { uid } = {}) => {
 	roomId = parseInt(roomId, 10);
 
 	return {
-		roomId: roomId > 0 ? roomId : null,
+		roomId: roomId <= 0 ? null : roomId,
 	};
 };
 
